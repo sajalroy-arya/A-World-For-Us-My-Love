@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Snow (Maneef)</title>
+    <style>
+        /* --- GLOBAL RESET & FONTS --- */
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Orbitron:wght@500&family=Poppins:wght@300;600&family=VT323&display=swap');
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body, html { overflow-x: hidden; scroll-behavior: smooth; font-family: 'Poppins', sans-serif; }
+        
+        /* --- LOADER --- */
+        #loader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; z-index: 9999; display: flex;
+            justify-content: center; align-items: center; color: #ff4d6d;
+            font-family: 'Orbitron', sans-serif; animation: fadeOut 1s 3s forwards; pointer-events: none;
+        }
+        @keyframes fadeOut { to { opacity: 0; } }
+
+        /* --- FLOATING MUSIC PLAYER --- */
+        #music-player {
+            position: fixed; bottom: 20px; right: 20px; z-index: 5000;
+            background: rgba(0,0,0,0.7); padding: 10px; border-radius: 50px;
+            border: 1px solid #ff4d6d; display: flex; align-items: center; gap: 10px;
+            backdrop-filter: blur(5px);
+        }
+        .vinyl {
+            width: 40px; height: 40px; background: #111; border-radius: 50%;
+            border: 2px solid #333; display: flex; justify-content: center; align-items: center;
+        }
+        .vinyl-inner { width: 12px; height: 12px; background: #ff4d6d; border-radius: 50%; }
+        .spinning { animation: spin 2s linear infinite; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        .music-btn { background: none; border: 1px solid #fff; color: #fff; border-radius: 20px; padding: 5px 10px; cursor: pointer; font-size: 10px; }
+
+        /* --- WORLD 1: THE COSMIC SRK INTRO --- */
+        .world-1 {
+            height: 100vh; background: radial-gradient(circle at center, #1a0b2e 0%, #000000 100%);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            color: white; position: relative; overflow: hidden;
+        }
+        .srk-pose { font-size: 120px; animation: srkOpen 3s ease-out forwards; filter: drop-shadow(0 0 20px rgba(255,255,255,0.5)); }
+        @keyframes srkOpen { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        .hero-title {
+            font-family: 'Dancing Script', cursive; font-size: 4rem; text-shadow: 0 0 20px #ff4d6d;
+            margin-top: 20px; opacity: 0; animation: fadeInUp 2s 1s forwards; text-align: center;
+        }
+        .scroll-hint { position: absolute; bottom: 30px; animation: bounce 2s infinite; opacity: 0.7; }
+
+        /* --- WORLD 2: KATIHAR WALKING PARK (Sunset) --- */
+        .world-2 {
+            height: 100vh; background: linear-gradient(to bottom, #ff9a9e 0%, #fecfef 100%);
+            position: relative; overflow: hidden; display: flex; align-items: flex-end;
+        }
+        .sun {
+            position: absolute; top: 10%; right: 10%; width: 100px; height: 100px;
+            background: #ffcc00; border-radius: 50%; box-shadow: 0 0 40px #ffcc00;
+        }
+        .scenery {
+            position: absolute; bottom: 0; width: 300%; height: 100%; pointer-events: none;
+            display: flex; align-items: flex-end;
+        }
+        .tree { font-size: 150px; position: absolute; bottom: 10%; opacity: 0.8; }
+        .lamp { font-size: 100px; position: absolute; bottom: 10%; filter: drop-shadow(0 0 10px yellow); }
+        .path {
+            width: 100%; height: 50px; background: #555; position: absolute; bottom: 0;
+            border-top: 5px solid #333;
+        }
+        .walkers {
+            position: absolute; bottom: 55px; left: 50%; transform: translateX(-50%);
+            font-size: 60px; display: flex; gap: 20px; transition: transform 0.1s;
+        }
+        .thought-bubble {
+            position: absolute; top: -60px; left: 0; background: white; padding: 10px;
+            border-radius: 10px; font-size: 14px; width: 150px; opacity: 0; transition: 0.5s;
+        }
+        
+        /* --- WORLD 3: THE GLITCH (Raw Emotion) --- */
+        .world-3 {
+            height: 80vh; background: #000; color: #ff0000; font-family: 'VT323', monospace;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; position: relative;
+        }
+        .glitch-text {
+            font-size: 5rem; position: relative; animation: noise 2s infinite linear alternate-reverse;
+        }
+        .error-msg { color: #fff; margin-top: 20px; font-size: 1.2rem; max-width: 80%; }
+        @keyframes noise {
+            0% { clip-path: inset(40% 0 61% 0); transform: translate(-2px, 2px); }
+            20% { clip-path: inset(92% 0 1% 0); transform: translate(2px, -2px); }
+            40% { clip-path: inset(43% 0 1% 0); transform: translate(-2px, 2px); }
+            60% { clip-path: inset(25% 0 58% 0); transform: translate(2px, -2px); }
+            100% { clip-path: inset(54% 0 7% 0); transform: translate(-2px, 2px); }
+        }
+
+        /* --- WORLD 4: PCM SCIENCE LAB (Blueprint) --- */
+        .world-4 {
+            height: 100vh; background-color: #001529; 
+            background-image: linear-gradient(#002a52 1px, transparent 1px), linear-gradient(90deg, #002a52 1px, transparent 1px);
+            background-size: 20px 20px; color: #00ffcc;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+        }
+        #heart-canvas { border: 2px solid #00ffcc; background: rgba(0,0,0,0.3); border-radius: 10px; }
+        .code-box { font-family: monospace; margin-bottom: 20px; background: rgba(0,0,0,0.5); padding: 15px; border-left: 3px solid #00ffcc; }
+
+        /* --- WORLD 5: THE ARCADE (Games) --- */
+        .world-5 {
+            height: 100vh; background: #222; border-top: 5px solid #ff00ff; border-bottom: 5px solid #00ffff;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; color: white;
+        }
+        .game-area {
+            width: 320px; height: 400px; background: #000; border: 4px solid #fff;
+            position: relative; overflow: hidden; cursor: none; box-shadow: 0 0 20px #ff00ff;
+        }
+        #player-bucket { position: absolute; bottom: 10px; left: 50%; font-size: 40px; transform: translateX(-50%); }
+        .falling-item { position: absolute; font-size: 20px; }
+        .score-board { font-family: 'VT323', monospace; font-size: 2rem; color: #00ffff; margin-bottom: 10px; }
+
+        /* --- WORLD 6: THE ENVELOPE (Intimate) --- */
+        .world-6 {
+            height: 100vh; background: #fdfbf7; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; color: #333;
+        }
+        .envelope-container { perspective: 1000px; cursor: pointer; }
+        .envelope {
+            width: 300px; height: 200px; background: #d4af37; position: relative;
+            transform-style: preserve-3d; transition: transform 0.6s;
+        }
+        .flap {
+            position: absolute; top: 0; width: 100%; height: 100px; background: #c5a028;
+            transform-origin: top; transition: 0.6s; z-index: 4; clip-path: polygon(0 0, 50% 100%, 100% 0);
+        }
+        .letter {
+            position: absolute; top: 10px; left: 10px; right: 10px; bottom: 10px;
+            background: white; padding: 15px; font-family: 'Dancing Script', cursive; font-size: 1.2rem;
+            transform: translateY(0); transition: 0.5s; z-index: 2; overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .open-env .flap { transform: rotateX(180deg); z-index: 1; }
+        .open-env .letter { transform: translateY(-120px); z-index: 5; height: 350px; }
+        
+        /* --- WORLD 7: THE FINALE (Romantic) --- */
+        .world-7 {
+            min-height: 100vh; background: radial-gradient(circle, #ffdde1 0%, #ee9ca7 100%);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; position: relative; padding: 20px;
+        }
+        .timer-box {
+            display: flex; gap: 15px; margin-bottom: 30px; background: rgba(255,255,255,0.4);
+            padding: 20px; border-radius: 15px; border: 1px solid #fff;
+        }
+        .time-unit { font-family: 'Orbitron', sans-serif; color: #ff4d6d; font-weight: bold; font-size: 1.5rem; }
+        .time-label { font-size: 0.8rem; color: #555; text-transform: uppercase; }
+        
+        .question-box h1 { color: #ff4d6d; font-family: 'Dancing Script'; font-size: 3.5rem; }
+        .buttons { margin-top: 30px; position: relative; height: 60px; width: 300px; }
+        .btn {
+            padding: 15px 40px; border: none; border-radius: 30px; font-size: 1.2rem; cursor: pointer;
+            font-family: 'Poppins', sans-serif; transition: 0.3s;
+        }
+        .yes-btn { background: #ff4d6d; color: white; box-shadow: 0 10px 20px rgba(255, 77, 109, 0.4); position: absolute; left: 20px; }
+        .yes-btn:hover { transform: scale(1.1); }
+        .no-btn { background: #ccc; color: #555; position: absolute; right: 20px; }
+
+        /* --- MINIATURE KISS ANIMATION --- */
+        .mini-kiss-scene {
+            height: 200px; display: flex; align-items: center; justify-content: center; gap: 100px;
+        }
+        .mini-human { font-size: 60px; transition: 1s ease-in-out; }
+        .kiss-active .sajal-mini { transform: translateX(50px); }
+        .kiss-active .minnie-mini { transform: translateX(-50px); }
+        
+        /* --- SNOW CANVAS --- */
+        #snow-canvas { position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9000; }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 600px) {
+            .hero-title { font-size: 2.5rem; }
+            .glitch-text { font-size: 3rem; }
+            .timer-box { gap: 5px; padding: 10px; }
+            .time-unit { font-size: 1rem; }
+            .buttons { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="loader">INITIALIZING LOVE PROTOCOLS...</div>
+
+    <div id="music-player">
+        <div class="vinyl" id="vinyl"><div class="vinyl-inner"></div></div>
+        <button class="music-btn" onclick="toggleMusic()">Music: <span id="music-status">OFF</span></button>
+        <audio id="bg-music" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio> </div>
+
+    <canvas id="snow-canvas"></canvas>
+
+    <section class="world-1">
+        <div class="srk-pose">🕺</div>
+        <h1 class="hero-title">Welcome to My Heart, Minnie.</h1>
+        <p style="margin-top: 10px; opacity: 0.8;">(Sajal Roy's Territory)</p>
+        <div class="scroll-hint">Scroll Down ↓</div>
+    </section>
+
+    <section class="world-2" id="katihar-world">
+        <div class="sun"></div>
+        <div class="scenery">
+            <div class="tree" style="left: 10%;">🌳</div>
+            <div class="lamp" style="left: 40%;">💡</div>
+            <div class="tree" style="left: 70%;">🌲</div>
+            <div class="lamp" style="left: 90%;">💡</div>
+        </div>
+        <div class="path"></div>
+        <div class="walkers" id="walkers">
+            <div class="thought-bubble" id="walker-bubble">Walking to Katihar...</div>
+            <span>🚶‍♂️</span><span>🚶‍♀️</span>
+        </div>
+    </section>
+
+    <section class="world-3">
+        <h1 class="glitch-text" data-text="SYSTEM ERROR">SYSTEM ERROR</h1>
+        <div class="error-msg">
+            <p>> DETECTED: PAST MISTAKES</p>
+            <p>> STATUS: I WAS LOST WITHOUT YOU.</p>
+            <p>> ACTION: REBUILDING EVERYTHING FOR SNOW.</p>
+        </div>
+    </section>
+
+    <section class="world-4">
+        <div class="code-box">
+            <p>const sajal = "PCM Student";</p>
+            <p>const minnie = "The Solution";</p>
+            <p>if (distance > 0) { love++; }</p>
+        </div>
+        <canvas id="heart-canvas" width="300" height="300"></canvas>
+        <p style="margin-top: 20px;">Proof that my heart beats in Sine Waves for you.</p>
+    </section>
+
+    <section class="world-5">
+        <div class="score-board">SCORE: <span id="score">0</span></div>
+        <div class="game-area" id="game-area">
+            <div id="player-bucket">🧺</div>
+        </div>
+        <p style="margin-top: 10px;">Catch the Hearts! (Avoid the broken ones)</p>
+    </section>
+
+    <section class="world-6">
+        <div class="envelope-container" onclick="toggleEnvelope()">
+            <div class="envelope" id="envelope">
+                <div class="flap"></div>
+                <div class="letter">
+                    <p id="typewriter-text"></p>
+                </div>
+            </div>
+        </div>
+        <p style="margin-top: 50px; color: #888;">Tap the envelope to read.</p>
+    </section>
+
+    <section class="world-7">
+        <div class="mini-kiss-scene" id="kiss-scene">
+            <div class="mini-human sajal-mini">🤵‍♂️</div>
+            <div class="mini-human minnie-mini">👰‍♀️</div>
+        </div>
+
+        <h2 style="color: #ff4d6d; margin-bottom: 20px;">Time Since Nov 28, 2025</h2>
+        <div class="timer-box">
+            <div><div class="time-unit" id="days">00</div><div class="time-label">Days</div></div>
+            <div><div class="time-unit" id="hours">00</div><div class="time-label">Hrs</div></div>
+            <div><div class="time-unit" id="minutes">00</div><div class="time-label">Mins</div></div>
+            <div><div class="time-unit" id="seconds">00</div><div class="time-label">Secs</div></div>
+        </div>
+
+        <div class="question-box">
+            <h1>Maneef, will you be my Valentine?</h1>
+            <p>From Jhansi to Katihar, Forever.</p>
+            <div class="buttons">
+                <button class="btn yes-btn" onclick="sayYes()">YES!</button>
+                <button class="btn no-btn" id="no-btn" onmouseover="runaway()">NO</button>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // --- 1. SNOWFALL ENGINE ---
+        const canvas = document.getElementById('snow-canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        const particles = [];
+        
+        for(let i=0; i<50; i++) particles.push({x: Math.random()*canvas.width, y: Math.random()*canvas.height, r: Math.random()*3+1, s: Math.random()*2+1});
+        
+        function drawSnow() {
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
+            ctx.beginPath();
+            particles.forEach(p => {
+                ctx.moveTo(p.x, p.y);
+                ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+                p.y += p.s;
+                if(p.y > canvas.height) p.y = 0;
+            });
+            ctx.fill();
+            requestAnimationFrame(drawSnow);
+        }
+        drawSnow();
+
+        // --- 2. MUSIC PLAYER ---
+        const audio = document.getElementById('bg-music');
+        const vinyl = document.getElementById('vinyl');
+        const status = document.getElementById('music-status');
+        
+        function toggleMusic() {
+            if (audio.paused) {
+                audio.play();
+                vinyl.classList.add('spinning');
+                status.innerText = "ON";
+            } else {
+                audio.pause();
+                vinyl.classList.remove('spinning');
+                status.innerText = "OFF";
+            }
+        }
+
+        // --- 3. KATIHAR PARALLAX ---
+        window.addEventListener('scroll', () => {
+            const scroll = window.scrollY;
+            const walkers = document.getElementById('walkers');
+            const bubble = document.getElementById('walker-bubble');
+            
+            // Move walkers
+            walkers.style.transform = `translateX(-50%) translateX(${scroll * 0.2}px)`;
+            
+            // Show bubble at specific scroll point
+            if(scroll > 400 && scroll < 800) {
+                bubble.style.opacity = 1;
+            } else {
+                bubble.style.opacity = 0;
+            }
+        });
+
+        // --- 4. PCM HEART GRAPH ---
+        const hCanvas = document.getElementById('heart-canvas');
+        const hCtx = hCanvas.getContext('2d');
+        hCtx.translate(150, 150);
+        hCtx.scale(1, -1); 
+        hCtx.strokeStyle = "#ff00ff";
+        hCtx.lineWidth = 2;
+
+        function drawHeartMath() {
+            hCtx.beginPath();
+            for (let t = 0; t <= Math.PI * 2; t += 0.05) {
+                let x = 16 * Math.pow(Math.sin(t), 3);
+                let y = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
+                hCtx.lineTo(x * 5, y * 5);
+            }
+            hCtx.stroke();
+        }
+        
+        // Trigger drawing when visible
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) drawHeartMath();
+            });
+        });
+        observer.observe(document.querySelector('.world-4'));
+
+        // --- 5. CATCH GAME ---
+        const gameArea = document.getElementById('game-area');
+        const bucket = document.getElementById('player-bucket');
+        const scoreEl = document.getElementById('score');
+        let score = 0;
+
+        gameArea.addEventListener('mousemove', (e) => {
+            let rect = gameArea.getBoundingClientRect();
+            let x = e.clientX - rect.left;
+            if(x < 0) x = 0;
+            if(x > 280) x = 280;
+            bucket.style.left = x + 'px';
+        });
+
+        function spawnHeart() {
+            let heart = document.createElement('div');
+            heart.classList.add('falling-item');
+            heart.innerText = '❤️';
+            heart.style.left = Math.random() * 280 + 'px';
+            heart.style.top = '0px';
+            gameArea.appendChild(heart);
+
+            let interval = setInterval(() => {
+                let top = parseInt(heart.style.top);
+                heart.style.top = (top + 3) + 'px';
+
+                // Check collision
+                let bRect = bucket.getBoundingClientRect();
+                let hRect = heart.getBoundingClientRect();
+
+                if(hRect.bottom >= bRect.top && hRect.right >= bRect.left && hRect.left <= bRect.right) {
+                    score++;
+                    scoreEl.innerText = score;
+                    heart.remove();
+                    clearInterval(interval);
+                }
+
+                if(top > 380) {
+                    heart.remove();
+                    clearInterval(interval);
+                }
+            }, 20);
+        }
+        setInterval(spawnHeart, 1000);
+
+        // --- 6. TYPEWRITER LETTER ---
+        const letterText = "My Dearest Snow,\n\nI know I'm a 19-year-old guy with too much code in his head (Agentic LX and all that), but you are the only variable that matters. \n\nI am sorry for the silence. I am sorry for the glitches. \n\nI want to build a world where the distance between Jhansi and Katihar is zero. \n\nLove, Sajal.";
+        let charIndex = 0;
+        let isTyping = false;
+
+        function toggleEnvelope() {
+            document.getElementById('envelope').classList.toggle('open-env');
+            if(!isTyping) {
+                isTyping = true;
+                typeWriter();
+            }
+        }
+
+        function typeWriter() {
+            if (charIndex < letterText.length) {
+                document.getElementById("typewriter-text").innerHTML += letterText.charAt(charIndex) === '\n' ? '<br>' : letterText.charAt(charIndex);
+                charIndex++;
+                setTimeout(typeWriter, 50);
+            }
+        }
+
+        // --- 7. MINI KISS & TIME ---
+        const kissObserver = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) document.getElementById('kiss-scene').classList.add('kiss-active');
+            });
+        });
+        kissObserver.observe(document.querySelector('.world-7'));
+
+        // Timer
+        const startDate = new Date("November 28, 2025 00:00:00").getTime();
+        setInterval(() => {
+            const now = new Date().getTime();
+            const diff = now - startDate;
+            document.getElementById("days").innerText = Math.floor(diff / (1000 * 60 * 60 * 24));
+            document.getElementById("hours").innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            document.getElementById("minutes").innerText = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            document.getElementById("seconds").innerText = Math.floor((diff % (1000 * 60)) / 1000);
+        }, 1000);
+
+        // --- 8. RUNAWAY BUTTON ---
+        function runaway() {
+            const btn = document.getElementById('no-btn');
+            const x = Math.random() * 200 - 100;
+            const y = Math.random() * 200 - 100;
+            btn.style.transform = `translate(${x}px, ${y}px)`;
+        }
+
+        function sayYes() {
+            alert("I knew it! See you in Katihar soon, Minnie! ❤️");
+            for(let i=0; i<100; i++) {
+                let confetti = document.createElement('div');
+                confetti.innerText = '🌸';
+                confetti.style.position = 'fixed';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.top = Math.random() * 100 + 'vh';
+                confetti.style.fontSize = '30px';
+                confetti.style.zIndex = '9999';
+                document.body.appendChild(confetti);
+            }
+        }
+    </script>
+</body>
+</html>
