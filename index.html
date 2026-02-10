@@ -3,512 +3,457 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>For My Snow (Maneef)</title>
+    <title>The Maneef Universe (Ver 10.0)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Cinzel:wght@600&family=VT323&family=Poppins:wght@300;600&family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
-        /* --- 1. CORE SYSTEM (FONTS & RESET) --- */
-        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Orbitron:wght@500&family=Poppins:wght@300;600&family=Cinzel:wght@600&family=VT323&display=swap');
-        
+        /* =========================================
+           1. CORE ENGINE (NO SCROLLING)
+           ========================================= */
+        :root {
+            --primary: #ff4d6d;
+            --gold: #ffd700;
+            --dark: #0f0f0f;
+            --paper: #f4e4bc;
+        }
+
         * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-tap-highlight-color: transparent; }
-        body, html { width: 100%; height: 100%; overflow: hidden; background: #000; font-family: 'Poppins', sans-serif; }
-
-        /* --- 2. TRANSITION LAYER (The Magic Curtain) --- */
-        #transition-curtain {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #000; z-index: 10000; pointer-events: none;
-            opacity: 1; transition: opacity 1.5s ease-in-out;
-        }
-        .fade-out { opacity: 0 !important; }
-
-        /* --- 3. UI ELEMENTS (Music & Nav) --- */
-        #music-player {
-            position: fixed; bottom: 30px; right: 30px; z-index: 9000;
-            width: 50px; height: 50px; border-radius: 50%;
-            background: rgba(255, 77, 109, 0.2); border: 1px solid #ff4d6d;
-            display: flex; justify-content: center; align-items: center; cursor: pointer;
-            box-shadow: 0 0 20px rgba(255, 77, 109, 0.3); transition: 0.3s;
-        }
-        #music-player:active { transform: scale(0.9); }
-        .vinyl-icon { font-size: 24px; animation: spin 3s linear infinite; animation-play-state: paused; }
-        .playing .vinyl-icon { animation-play-state: running; }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-
-        /* --- 4. WORLD CONTAINER LOGIC --- */
-        .world {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            opacity: 0; pointer-events: none; transform: scale(1.1);
-            transition: opacity 1s ease, transform 1s ease;
-            z-index: 1; overflow: hidden;
-        }
-        .active-world {
-            opacity: 1; pointer-events: all; transform: scale(1); z-index: 10;
-        }
-
-        /* --- 5. NEXT BUTTON (The Key) --- */
-        .next-btn {
-            position: absolute; bottom: 40px; padding: 12px 30px;
-            background: transparent; border: 2px solid rgba(255,255,255,0.5); color: white;
-            border-radius: 30px; cursor: pointer; font-family: 'Orbitron', sans-serif;
-            letter-spacing: 2px; text-transform: uppercase; transition: 0.3s;
-            opacity: 0; transform: translateY(20px); pointer-events: none;
-        }
-        .show-next { opacity: 1; transform: translateY(0); pointer-events: all; }
-        .next-btn:hover { background: white; color: black; box-shadow: 0 0 15px white; }
-
-        /* =========================================
-           WORLD 1: COSMIC INTRO (SRK Vibe)
-           ========================================= */
-        #world-1 {
-            background: radial-gradient(circle at center, #1a0b2e 0%, #000000 100%);
-            color: white; text-align: center;
-        }
-        .srk-shadow {
-            font-size: 150px; opacity: 0; filter: blur(5px);
-            animation: srkEnter 3s ease-out forwards 0.5s;
-        }
-        @keyframes srkEnter {
-            0% { transform: scale(0.8); opacity: 0; filter: blur(10px); }
-            100% { transform: scale(1); opacity: 1; filter: blur(0); }
-        }
-        .title-main {
-            font-family: 'Cinzel', serif; font-size: 3.5rem; margin-top: 20px;
-            text-shadow: 0 0 20px rgba(255, 77, 109, 0.8);
-            opacity: 0; animation: fadeUp 2s ease forwards 1.5s;
-        }
-        .subtitle {
-            font-size: 1rem; color: #ffb6c1; letter-spacing: 3px; margin-top: 10px;
-            opacity: 0; animation: fadeUp 2s ease forwards 2s;
-        }
-        @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
-
-        /* =========================================
-           WORLD 2: KATIHAR (Sunset Parallax)
-           ========================================= */
-        #world-2 {
-            background: linear-gradient(180deg, #ff9a9e 0%, #fecfef 50%, #a18cd1 100%);
-            overflow: hidden;
-        }
-        .sun {
-            position: absolute; top: 15%; right: 15%; width: 120px; height: 120px;
-            background: #ffecd2; border-radius: 50%;
-            box-shadow: 0 0 60px #ff9a9e; animation: pulseSun 4s infinite alternate;
-        }
-        @keyframes pulseSun { from { transform: scale(1); } to { transform: scale(1.1); } }
         
-        .landscape {
-            position: absolute; bottom: 0; width: 100%; height: 60%;
-            display: flex; align-items: flex-end; justify-content: center;
+        body, html {
+            width: 100%; height: 100%; overflow: hidden;
+            background: #000; font-family: 'Poppins', sans-serif;
         }
-        .tree { font-size: 180px; position: absolute; bottom: 15%; left: 10%; opacity: 0.8; }
-        .couple-walk {
-            font-size: 80px; position: absolute; bottom: 15%; 
-            animation: walkIn 4s linear forwards;
+
+        /* UI LAYER */
+        #ui-layer {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 10000;
         }
-        @keyframes walkIn { from { left: -20%; } to { left: 40%; } }
-        .katihar-text {
-            position: absolute; top: 20%; left: 10%; font-family: 'Dancing Script', cursive;
-            font-size: 2.5rem; color: #fff; text-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            opacity: 0; animation: fadeUp 2s ease forwards 3s;
+        
+        .music-widget {
+            position: absolute; bottom: 20px; left: 20px; pointer-events: auto;
+            background: rgba(0,0,0,0.6); padding: 10px; border-radius: 50px;
+            border: 1px solid var(--primary); color: white; cursor: pointer;
+            display: flex; align-items: center; gap: 10px; transition: 0.3s;
+        }
+        .music-widget:hover { transform: scale(1.05); background: var(--primary); }
+        .spin-disc { animation: spin 2s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* SCENE MANAGER */
+        .scene {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            opacity: 0; pointer-events: none; transition: opacity 1s, transform 1s;
+            transform: scale(1.1); overflow: hidden; display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+        }
+        .scene.active { opacity: 1; pointer-events: auto; transform: scale(1); z-index: 10; }
+
+        /* NAV BUTTONS */
+        .next-btn {
+            position: absolute; bottom: 30px; right: 30px;
+            padding: 15px 30px; background: white; color: black; border: none;
+            border-radius: 30px; font-weight: bold; cursor: pointer;
+            box-shadow: 0 0 20px rgba(255,255,255,0.5); opacity: 0; pointer-events: none;
+            transition: 0.5s; z-index: 100; font-family: 'Cinzel', serif;
+        }
+        .next-btn.show { opacity: 1; pointer-events: auto; animation: pulseBtn 2s infinite; }
+        @keyframes pulseBtn { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+
+        /* =========================================
+           SCENE 0: HACKER BOOT (Green)
+           ========================================= */
+        #scene-0 { background: #000; font-family: 'VT323', monospace; color: #0f0; justify-content: flex-start; padding: 40px; }
+        .term-line { font-size: 1.2rem; margin-bottom: 5px; text-shadow: 0 0 5px #0f0; }
+        .cursor { display: inline-block; width: 10px; height: 20px; background: #0f0; animation: blink 1s infinite; }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* =========================================
+           SCENE 1: COSMIC INTRO (Purple)
+           ========================================= */
+        #scene-1 { background: radial-gradient(circle, #240b36 0%, #000 100%); }
+        .hero-title { font-family: 'Cinzel'; font-size: 3rem; color: #fff; text-shadow: 0 0 20px #c31432; text-align: center; }
+        .star { position: absolute; background: white; border-radius: 50%; animation: twinkle 2s infinite; }
+        @keyframes twinkle { 50% { opacity: 0.3; } }
+
+        /* =========================================
+           SCENE 2: THE ANCIENT BOOK (3D)
+           ========================================= */
+        #scene-2 { background: #2c3e50; perspective: 1500px; }
+        .book-container { width: 300px; height: 420px; position: relative; transform-style: preserve-3d; transition: transform 1s; }
+        .book-cover {
+            position: absolute; width: 100%; height: 100%; background: #5d4037;
+            border-radius: 5px; display: flex; align-items: center; justify-content: center;
+            color: var(--gold); border: 2px solid var(--gold); font-family: 'Cinzel';
+            backface-visibility: hidden; z-index: 20; transform-origin: left; transition: 1s; cursor: pointer;
+            box-shadow: 10px 10px 30px rgba(0,0,0,0.5);
+        }
+        .book-page {
+            position: absolute; width: 95%; height: 95%; top: 2.5%; left: 2.5%;
+            background: var(--paper); padding: 20px; font-family: 'Dancing Script'; font-size: 1.2rem;
+            transform-origin: left; transition: 1s; z-index: 10;
+            display: flex; flex-direction: column; justify-content: center; text-align: center;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.1);
+        }
+        .book-container.open .book-cover { transform: rotateY(-180deg); }
+        .book-container.page2 .page-1 { transform: rotateY(-180deg); z-index: 30; }
+
+        /* =========================================
+           SCENE 3: THE CHAT (Dark Mode)
+           ========================================= */
+        #scene-3 { background: #0b141a; justify-content: flex-start; padding-top: 70px; }
+        .chat-nav { position: absolute; top: 0; width: 100%; height: 60px; background: #202c33; display: flex; align-items: center; padding: 0 20px; gap: 15px; color: white; }
+        .chat-scroll { width: 100%; max-width: 500px; padding: 20px; display: flex; flex-direction: column; gap: 10px; overflow-y: auto; height: 80%; }
+        .msg { padding: 10px 15px; border-radius: 10px; max-width: 75%; font-size: 14px; position: relative; opacity: 0; transform: translateY(20px); animation: popIn 0.5s forwards; }
+        .msg.her { background: #202c33; color: white; align-self: flex-start; border-top-left-radius: 0; }
+        .msg.me { background: #005c4b; color: white; align-self: flex-end; border-top-right-radius: 0; }
+        @keyframes popIn { to { opacity: 1; transform: translateY(0); } }
+
+        /* =========================================
+           SCENE 4: RPG WALK (Pixel Art Style)
+           ========================================= */
+        #scene-4 { background: linear-gradient(#87CEEB 0%, #E0F7FA 100%); overflow: hidden; }
+        .ground { position: absolute; bottom: 0; width: 100%; height: 100px; background: #4CAF50; border-top: 10px solid #388E3C; }
+        .rpg-hero { position: absolute; bottom: 80px; left: 20px; font-size: 60px; transition: left 0.1s linear; }
+        .tree-obstacle { position: absolute; bottom: 80px; left: 70%; font-size: 100px; filter: drop-shadow(0 0 10px red); }
+        .quiz-modal {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: white; padding: 20px; border: 4px solid #333; border-radius: 10px;
+            text-align: center; display: none; box-shadow: 0 10px 50px rgba(0,0,0,0.5); font-family: 'VT323'; font-size: 1.5rem;
+        }
+        .quiz-btn { margin: 10px; padding: 10px 20px; cursor: pointer; background: #eee; border: 2px solid #333; }
+        .quiz-btn:hover { background: #ff4d6d; color: white; }
+
+        /* =========================================
+           SCENE 5: THE LAKE (Night Reflection)
+           ========================================= */
+        #scene-5 { background: linear-gradient(to bottom, #020024 0%, #090979 50%, #00d4ff 100%); }
+        .moon { position: absolute; top: 10%; right: 10%; width: 80px; height: 80px; background: #fff; border-radius: 50%; box-shadow: 0 0 40px #fff; }
+        .water { position: absolute; bottom: 0; width: 100%; height: 35%; background: rgba(0,0,50,0.8); backdrop-filter: blur(4px); border-top: 1px solid rgba(255,255,255,0.2); }
+        .dock { position: absolute; bottom: 20%; left: 0; width: 40%; height: 20px; background: #3e2723; border-radius: 0 10px 10px 0; }
+        .couple-sit { position: absolute; bottom: 22%; left: 25%; font-size: 60px; filter: drop-shadow(0 0 10px black); }
+        .lantern { position: absolute; width: 30px; height: 40px; background: radial-gradient(#ffeb3b, #ff9800); border-radius: 5px; opacity: 0.8; animation: floatUp 8s linear forwards; }
+        @keyframes floatUp { to { transform: translateY(-100vh) rotate(10deg); opacity: 0; } }
+
+        /* =========================================
+           SCENE 6: THE CONTRACT (Paper)
+           ========================================= */
+        #scene-6 { background: #555; }
+        .contract-paper {
+            width: 350px; background: #fffdf0; padding: 30px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5); font-family: 'Courier New';
+            transform: rotate(-2deg); position: relative;
+        }
+        .stamp {
+            position: absolute; bottom: 20px; right: 20px; width: 80px; height: 80px;
+            border: 3px solid red; border-radius: 50%; color: red; font-weight: bold;
+            display: flex; align-items: center; justify-content: center; transform: rotate(-20deg);
+            opacity: 0; transition: 0.5s; font-size: 14px; text-align: center;
         }
 
         /* =========================================
-           WORLD 3: THE GLITCH (Raw Emotion)
+           SCENE 7: GRAND FINALE (Infinite)
            ========================================= */
-        #world-3 {
-            background: #000; color: #ff003c; font-family: 'VT323', monospace;
+        #scene-7 { background: #ff0044; overflow: hidden; }
+        .infinite-bg {
+            position: absolute; width: 200%; height: 200%; top: -50%; left: -50%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="50"><text x="0" y="30" font-family="Arial" font-weight="bold" font-size="20" fill="rgba(255,255,255,0.1)">I LOVE YOU FOREVER</text></svg>');
+            transform: rotate(-10deg); animation: scrollText 20s linear infinite;
         }
-        .glitch-container { position: relative; }
-        .glitch-title {
-            font-size: 5rem; text-transform: uppercase; position: relative;
-            text-shadow: 2px 0 #fff, -2px 0 #0ff;
-            animation: glitch-anim 0.3s infinite;
-        }
-        @keyframes glitch-anim {
-            0% { transform: translate(0); }
-            20% { transform: translate(-2px, 2px); }
-            40% { transform: translate(-2px, -2px); }
-            60% { transform: translate(2px, 2px); }
-            80% { transform: translate(2px, -2px); }
-            100% { transform: translate(0); }
-        }
-        .console-log {
-            font-size: 1.2rem; color: #00ff00; margin-top: 20px; text-align: left;
-            width: 80%; max-width: 400px; border-left: 2px solid #00ff00; padding-left: 15px;
-        }
-
-        /* =========================================
-           WORLD 4: PCM SCIENCE (Blueprint)
-           ========================================= */
-        #world-4 {
-            background-color: #0d1117;
-            background-image: radial-gradient(#232936 1px, transparent 1px);
-            background-size: 30px 30px; color: #58a6ff;
-        }
-        .blueprint-card {
-            border: 2px solid #58a6ff; padding: 20px; border-radius: 10px;
-            background: rgba(13, 17, 23, 0.9); position: relative;
-        }
-        .blueprint-card::before {
-            content: "PROJECT: SNOW"; position: absolute; top: -15px; left: 20px;
-            background: #0d1117; padding: 0 10px; color: #58a6ff; font-weight: bold;
-        }
-        canvas#heart-math { border: 1px solid rgba(88, 166, 255, 0.3); margin-top: 20px; }
-
-        /* =========================================
-           WORLD 5: GAME (Mandatory)
-           ========================================= */
-        #world-5 {
-            background: #200f21; border: 10px solid #3e204a;
-            box-shadow: inset 0 0 50px #000;
-        }
-        .game-ui {
-            width: 320px; height: 450px; border: 4px solid #fff; position: relative;
-            background: #000; overflow: hidden; cursor: none;
-        }
-        #basket {
-            position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);
-            font-size: 40px; pointer-events: none;
-        }
-        .falling-heart { position: absolute; font-size: 24px; top: -30px; }
-        .game-score {
-            position: absolute; top: 10px; right: 10px; color: #fff; font-family: 'VT323'; font-size: 1.5rem;
-        }
-        .tutorial { color: #fff; margin-bottom: 10px; animation: blink 1s infinite; }
-        @keyframes blink { 50% { opacity: 0.5; } }
-
-        /* =========================================
-           WORLD 6: LETTER (Interactive)
-           ========================================= */
-        #world-6 {
-            background: #f3f3f3; color: #333;
-        }
-        .env-wrapper { perspective: 1000px; cursor: pointer; transition: transform 0.3s; }
-        .env-wrapper:hover { transform: scale(1.05); }
-        .envelope {
-            width: 300px; height: 200px; background: #e0c097; position: relative;
-            transform-style: preserve-3d; transition: 0.6s;
-        }
-        .flap {
-            position: absolute; top: 0; left: 0; width: 0; height: 0;
-            border-left: 150px solid transparent; border-right: 150px solid transparent;
-            border-top: 100px solid #c5a075; transform-origin: top; transition: 0.5s; z-index: 5;
-        }
-        .letter-paper {
-            position: absolute; top: 10px; left: 10px; width: 280px; height: 180px;
-            background: #fff; padding: 20px; font-family: 'Dancing Script', cursive; font-size: 1.1rem;
-            transition: 0.5s; z-index: 3; box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            display: flex; align-items: center; justify-content: center; text-align: center;
-        }
-        .open .flap { transform: rotateX(180deg); }
-        .open .letter-paper { transform: translateY(-120px); height: 350px; z-index: 6; }
-
-        /* =========================================
-           WORLD 7: FINALE (The Question)
-           ========================================= */
-        #world-7 {
-            background: radial-gradient(circle, #ffdde1 0%, #ee9ca7 100%);
-        }
+        @keyframes scrollText { from { background-position: 0 0; } to { background-position: 100% 100%; } }
+        
         .final-card {
-            background: rgba(255, 255, 255, 0.8); padding: 40px; border-radius: 20px;
-            text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.1);
-            backdrop-filter: blur(10px); width: 90%; max-width: 500px;
+            background: white; padding: 40px; border-radius: 20px; text-align: center;
+            z-index: 10; box-shadow: 0 20px 60px rgba(0,0,0,0.3); max-width: 90%;
         }
-        .final-title { font-family: 'Dancing Script'; font-size: 3rem; color: #ff4d6d; }
-        .timer-display {
-            font-family: 'Orbitron'; color: #555; margin: 20px 0; font-size: 1.2rem;
-            display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
-        }
-        .t-box div { font-size: 0.8rem; color: #999; }
-        .action-area { position: relative; height: 60px; margin-top: 30px; }
-        .btn-yes {
-            background: #ff4d6d; color: white; border: none; padding: 15px 40px;
-            border-radius: 50px; font-size: 1.2rem; cursor: pointer;
-            box-shadow: 0 5px 15px rgba(255, 77, 109, 0.4); transition: 0.3s;
-        }
-        .btn-yes:hover { transform: scale(1.1); }
-        .btn-no {
-            position: absolute; background: #ddd; color: #555; border: none;
-            padding: 10px 20px; border-radius: 50px; cursor: default;
-        }
+        .btn-yes { background: #ff4d6d; color: white; padding: 15px 40px; border: none; border-radius: 30px; font-size: 1.2rem; cursor: pointer; box-shadow: 0 5px 15px rgba(255,77,109,0.4); }
+        .btn-no { background: #ccc; padding: 10px 20px; border-radius: 30px; border: none; position: absolute; cursor: pointer; }
 
-        /* --- PARTICLES & DECOR --- */
-        #particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; }
     </style>
 </head>
 <body>
 
     <audio id="bg-music" loop>
-        <source src="https://cdn.pixabay.com/download/audio/2022/03/24/audio_3497e74360.mp3?filename=romantic-piano-11075.mp3" type="audio/mpeg">
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
     </audio>
-    <div id="music-player" onclick="toggleMusic()">
-        <div class="vinyl-icon">🎵</div>
+    <div id="ui-layer">
+        <div class="music-widget" onclick="toggleAudio()">
+            <div style="font-size: 20px;">🎵</div>
+            <span id="music-label">Start Music</span>
+        </div>
     </div>
 
-    <div id="transition-curtain"></div>
-    <canvas id="particles"></canvas>
+    <div id="scene-0" class="scene active">
+        <div id="terminal"></div>
+        <button id="boot-btn" class="next-btn" onclick="nextScene(1)" style="position: relative; margin-top: 20px; background: transparent; color: #0f0; border: 1px solid #0f0;">> LAUNCH PROTOCOL: MANEEF</button>
+    </div>
 
-    <section id="world-1" class="world active-world">
-        <div class="srk-shadow">🕺</div>
-        <h1 class="title-main">Welcome to My Heart</h1>
-        <p class="subtitle">A DIGITAL UNIVERSE FOR MINNIE</p>
-        <button class="next-btn show-next" onclick="goToWorld(2)">Enter the Story</button>
-    </section>
+    <div id="scene-1" class="scene">
+        <h1 class="hero-title">The Maneef Universe</h1>
+        <p style="color: #aaa; margin-top: 10px;">Created by Sajal Roy</p>
+        <div style="font-size: 80px; margin-top: 30px; animation: float 3s infinite ease-in-out;">🪐</div>
+        <button class="next-btn show" onclick="nextScene(2)">Open The Book</button>
+    </div>
 
-    <section id="world-2" class="world">
-        <div class="sun"></div>
-        <div class="katihar-text">"All roads lead to Katihar..."</div>
-        <div class="landscape">
-            <div class="tree">🌳</div>
-            <div class="couple-walk">🚶‍♂️🚶‍♀️</div>
-        </div>
-        <button class="next-btn" id="btn-2" onclick="goToWorld(3)">But then...</button>
-    </section>
-
-    <section id="world-3" class="world">
-        <div class="glitch-container">
-            <h1 class="glitch-title">SYSTEM FAILURE</h1>
-        </div>
-        <div class="console-log">
-            <p>> ERROR: User 'Sajal' was lost.</p>
-            <p>> DETECTED: Missing 'Snow'.</p>
-            <p>> STATUS: REBUILDING...</p>
-        </div>
-        <button class="next-btn" id="btn-3" onclick="goToWorld(4)">Fix The Code</button>
-    </section>
-
-    <section id="world-4" class="world">
-        <div class="blueprint-card">
-            <h3>LOGIC REPAIRED.</h3>
-            <p>Variable: Love = Infinity</p>
-            <canvas id="heart-math" width="300" height="300"></canvas>
-        </div>
-        <p style="margin-top: 20px; opacity: 0.7;">Proving my heart beats in Sine Waves.</p>
-        <button class="next-btn show-next" onclick="goToWorld(5)">Play The Game</button>
-    </section>
-
-    <section id="world-5" class="world">
-        <p class="tutorial">MOVE MOUSE/TOUCH TO CATCH HEARTS! <br> (Need 5 to pass)</p>
-        <div class="game-ui" id="game-area">
-            <div class="game-score">SCORE: <span id="score">0</span>/5</div>
-            <div id="basket">🧺</div>
-        </div>
-        <button class="next-btn" id="btn-5" onclick="goToWorld(6)">Read Message</button>
-    </section>
-
-    <section id="world-6" class="world">
-        <div class="env-wrapper" onclick="openEnvelope()">
-            <div class="envelope">
-                <div class="flap"></div>
-                <div class="letter-paper">
-                    <p id="type-text"></p>
-                </div>
+    <div id="scene-2" class="scene">
+        <h2 style="color: white; margin-bottom: 20px;">The Archives</h2>
+        <div class="book-container" onclick="flipBook()">
+            <div class="book-cover">
+                <h1>OUR STORY</h1>
+                <p style="font-size: 10px; position: absolute; bottom: 20px;">(Click to Open)</p>
+            </div>
+            <div class="book-page page-1">
+                <h3>Chapter 1: The Spark</h3>
+                <p>I was just a PCM student in Jhansi.</p>
+                <p>Then I saw Snow.</p>
+                <p>And logic stopped making sense.</p>
+                <p style="color: red;">(Click to Turn)</p>
+            </div>
+            <div class="book-page page-2" style="transform: rotateY(-180deg); z-index: 1;">
+                <h3>Chapter 2: The Glitch</h3>
+                <p>I got lost in Agentic LX.</p>
+                <p>I blocked you.</p>
+                <p>I was an idiot.</p>
+                <p>But I'm fixing it now.</p>
             </div>
         </div>
-        <p style="margin-top: 30px; color: #888;">Tap to Open</p>
-        <button class="next-btn" id="btn-6" onclick="goToWorld(7)">The Finale</button>
-    </section>
+        <button class="next-btn" id="btn-2" onclick="nextScene(3)">Check Phone</button>
+    </div>
 
-    <section id="world-7" class="world">
+    <div id="scene-3" class="scene">
+        <div class="chat-nav">
+            <div style="width: 35px; height: 35px; background: #ff4d6d; border-radius: 50%; display: grid; place-items: center;">M</div>
+            <span>Minnie (Snow)</span>
+        </div>
+        <div class="chat-scroll" id="chat-box"></div>
+        <button class="next-btn" id="btn-3" onclick="nextScene(4)">Walk to Her</button>
+    </div>
+
+    <div id="scene-4" class="scene">
+        <div class="ground"></div>
+        <div class="rpg-hero" id="hero">🚶‍♂️</div>
+        <div class="tree-obstacle" id="tree">🌲</div>
+        <div class="quiz-modal" id="quiz">
+            <p>STOP! To pass the Tree of Doubt...</p>
+            <p>What is Sajal's favorite nickname for you?</p>
+            <button class="quiz-btn" onclick="wrongAnswer()">Maneef</button>
+            <button class="quiz-btn" onclick="rightAnswer()">Snow / Pakodi</button>
+            <button class="quiz-btn" onclick="wrongAnswer()">Girlfriend</button>
+        </div>
+        <h2 style="position: absolute; top: 20%; color: #333;">Walk to Katihar...</h2>
+        <button class="next-btn" id="btn-4" onclick="nextScene(5)">Enter The Lake</button>
+    </div>
+
+    <div id="scene-5" class="scene">
+        <div class="moon"></div>
+        <div class="couple-sit">👩‍❤️‍👨</div>
+        <div class="dock"></div>
+        <div class="water"></div>
+        <button onclick="releaseLantern()" style="position: absolute; bottom: 50px; left: 50%; transform: translateX(-50%); padding: 10px 20px; background: orange; border: none; border-radius: 20px; cursor: pointer; z-index: 50;">🏮 Release Lantern 🏮</button>
+        <button class="next-btn" id="btn-5" onclick="nextScene(6)">Make a Promise</button>
+    </div>
+
+    <div id="scene-6" class="scene">
+        <div class="contract-paper">
+            <h2 style="text-align: center; border-bottom: 2px solid black;">AGREEMENT</h2>
+            <p style="margin-top: 20px;">I, Sajal Roy, promise to:</p>
+            <ul style="margin-left: 20px; line-height: 1.6;">
+                <li>Never block Snow again.</li>
+                <li>Visit Katihar soon.</li>
+                <li>Build the empire FOR us.</li>
+                <li>Love you even when I'm coding.</li>
+            </ul>
+            <div style="margin-top: 30px; display: flex; justify-content: space-between;">
+                <span>Signed: Sajal</span>
+                <button onclick="signContract()" style="padding: 5px 10px;">Sign Here</button>
+            </div>
+            <div class="stamp" id="stamp">APPROVED<br>BY LOVE</div>
+        </div>
+        <button class="next-btn" id="btn-6" onclick="nextScene(7)">Grand Finale</button>
+    </div>
+
+    <div id="scene-7" class="scene">
+        <div class="infinite-bg"></div>
         <div class="final-card">
-            <h1 class="final-title">Maneef...</h1>
-            <p>You are my bug fix, my happiness, my Snow.</p>
-            
-            <div class="timer-display">
-                <div class="t-box"><span id="d">00</span><div>DAYS</div></div>
-                <div class="t-box"><span id="h">00</span><div>HRS</div></div>
-                <div class="t-box"><span id="m">00</span><div>MIN</div></div>
-                <div class="t-box"><span id="s">00</span><div>SEC</div></div>
-            </div>
-
-            <div class="action-area">
-                <button class="btn-yes" onclick="celebrate()">Will you be my Valentine?</button>
-                <button class="btn-no" id="no-btn" onmouseover="runaway()">NO</button>
+            <h1 style="font-family: 'Dancing Script'; color: #ff4d6d; font-size: 3rem;">I Love You</h1>
+            <p>Forever & Ever & Ever...</p>
+            <div style="margin-top: 30px; position: relative; height: 60px;">
+                <button class="btn-yes" onclick="finish()">Will you be my Valentine?</button>
+                <button class="btn-no" id="runaway" onmouseover="moveNo()">NO</button>
             </div>
         </div>
-    </section>
+    </div>
 
     <script>
-        // --- 1. CORE NAVIGATION ---
-        function goToWorld(n) {
-            // Remove active class from current
-            document.querySelector('.active-world').classList.remove('active-world');
-            
-            // Add active class to next
-            const next = document.getElementById(`world-${n}`);
-            next.classList.add('active-world');
-
-            // Specific triggers
-            if(n === 2) setTimeout(() => document.getElementById('btn-2').classList.add('show-next'), 4000);
-            if(n === 3) setTimeout(() => document.getElementById('btn-3').classList.add('show-next'), 3000);
-            if(n === 4) startMathAnim();
-            if(n === 5) startGame();
-            if(n === 7) startTimer();
-        }
-
-        // --- 2. MUSIC PLAYER ---
+        // --- AUDIO ENGINE ---
         const audio = document.getElementById('bg-music');
-        let isPlaying = false;
-        
-        function toggleMusic() {
-            if(!isPlaying) {
-                audio.play().catch(e => alert("Tap screen to enable audio!"));
-                document.querySelector('.vinyl-icon').classList.add('playing'); // Fixed animation class
-                isPlaying = true;
+        function toggleAudio() {
+            if (audio.paused) {
+                audio.play();
+                document.getElementById('music-label').innerText = "Playing...";
             } else {
                 audio.pause();
-                document.querySelector('.vinyl-icon').classList.remove('playing');
-                isPlaying = false;
+                document.getElementById('music-label').innerText = "Paused";
             }
         }
 
-        // --- 3. PAGE LOAD FADE ---
-        window.onload = () => {
-            setTimeout(() => {
-                document.getElementById('transition-curtain').classList.add('fade-out');
-            }, 500);
+        // --- SCENE NAVIGATOR ---
+        function nextScene(n) {
+            document.querySelector('.scene.active').classList.remove('active');
+            document.getElementById('scene-' + n).classList.add('active');
+            
+            // Trigger Scene Specific Logic
+            if(n === 0) runBoot();
+            if(n === 1) createStars();
+            if(n === 3) startChat();
+            if(n === 4) startWalking();
         }
 
-        // --- 4. MATH HEART ANIMATION ---
-        function startMathAnim() {
-            const cvs = document.getElementById('heart-math');
-            const ctx = cvs.getContext('2d');
-            ctx.translate(150, 150); ctx.scale(1, -1);
-            let t = 0;
-            
-            function draw() {
-                ctx.fillStyle = "rgba(13, 17, 23, 0.1)";
-                ctx.fillRect(-150, -150, 300, 300);
-                
-                ctx.beginPath();
-                ctx.strokeStyle = "#58a6ff"; ctx.lineWidth = 2;
-                
-                // Cardioid Formula
-                let x = 16 * Math.pow(Math.sin(t), 3);
-                let y = 13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t);
-                
-                ctx.arc(x*5, y*5, 2, 0, Math.PI*2);
-                ctx.fill();
-                ctx.stroke();
-
-                t += 0.05;
-                if(t < 100) requestAnimationFrame(draw);
-            }
-            draw();
-        }
-
-        // --- 5. GAME LOGIC (Glitch Free) ---
-        let score = 0;
-        function startGame() {
-            const area = document.getElementById('game-area');
-            const basket = document.getElementById('basket');
-            
-            // Mouse/Touch Follow
-            area.addEventListener('mousemove', e => {
-                let rect = area.getBoundingClientRect();
-                let x = e.clientX - rect.left;
-                if(x < 20) x = 20; if(x > 300) x = 300;
-                basket.style.left = x + 'px';
-            });
-
-            // Spawner
-            let spawner = setInterval(() => {
-                if(score >= 5) {
-                    clearInterval(spawner);
-                    document.getElementById('btn-5').classList.add('show-next');
-                    document.querySelector('.tutorial').innerText = "UNLOCKED! CLICK BUTTON BELOW";
-                    return;
+        // --- SCENE 0: BOOT ---
+        function runBoot() {
+            const lines = [
+                "INITIALIZING AGENTIC_LX...",
+                "ERROR: EMOTIONAL OVERLOAD DETECTED",
+                "USER: 'SAJAL' REQUESTING ACCESS TO 'MANEEF'",
+                "ACCESS GRANTED.",
+                "LOADING LOVE MODULES..."
+            ];
+            const term = document.getElementById('terminal');
+            let i = 0;
+            const int = setInterval(() => {
+                if(i < lines.length) {
+                    const p = document.createElement('div');
+                    p.className = 'term-line';
+                    p.innerText = "> " + lines[i];
+                    term.appendChild(p);
+                    i++;
+                } else {
+                    clearInterval(int);
+                    document.getElementById('boot-btn').style.opacity = 1;
+                    document.getElementById('boot-btn').style.pointerEvents = 'auto';
                 }
-                
-                let heart = document.createElement('div');
-                heart.innerText = '❤️';
-                heart.className = 'falling-heart';
-                heart.style.left = Math.random() * 280 + 'px';
-                area.appendChild(heart);
-                
-                let pos = 0;
-                let fall = setInterval(() => {
-                    pos += 4;
-                    heart.style.top = pos + 'px';
-                    
-                    // Collision
-                    let bRect = basket.getBoundingClientRect();
-                    let hRect = heart.getBoundingClientRect();
-                    
-                    if(hRect.bottom >= bRect.top && hRect.right >= bRect.left && hRect.left <= bRect.right) {
-                        score++;
-                        document.getElementById('score').innerText = score;
-                        heart.remove();
-                        clearInterval(fall);
-                    }
-                    
-                    if(pos > 450) { heart.remove(); clearInterval(fall); }
-                }, 20);
             }, 800);
         }
+        window.onload = runBoot;
 
-        // --- 6. ENVELOPE & TYPEWRITER ---
-        const msg = "My Dearest Snow,\nI know I messed up before.\nBut you are the only code\nthat matters to me.\nI love you.";
-        let typed = false;
-        
-        function openEnvelope() {
-            const env = document.querySelector('.envelope');
-            env.classList.add('open');
-            
-            if(!typed) {
-                let i = 0;
-                const p = document.getElementById('type-text');
-                p.innerHTML = "";
-                let timer = setInterval(() => {
-                    if(i < msg.length) {
-                        p.innerHTML += msg.charAt(i) === '\n' ? '<br>' : msg.charAt(i);
-                        i++;
-                    } else {
-                        clearInterval(timer);
-                        setTimeout(() => document.getElementById('btn-6').classList.add('show-next'), 1000);
-                    }
-                }, 100);
-                typed = true;
+        // --- SCENE 1: STARS ---
+        function createStars() {
+            for(let i=0; i<50; i++) {
+                const s = document.createElement('div');
+                s.className = 'star';
+                s.style.left = Math.random()*100 + '%';
+                s.style.top = Math.random()*100 + '%';
+                s.style.width = Math.random()*3 + 'px';
+                s.style.height = s.style.width;
+                s.style.animationDelay = Math.random() + 's';
+                document.getElementById('scene-1').appendChild(s);
             }
         }
 
-        // --- 7. FINALE UTILS ---
-        function runaway() {
-            const btn = document.getElementById('no-btn');
-            btn.style.left = Math.random() * 200 + 'px';
-            btn.style.top = Math.random() * 50 + 'px';
+        // --- SCENE 2: BOOK ---
+        let pageState = 0; // 0=closed, 1=open p1, 2=flipped to p2
+        function flipBook() {
+            const book = document.querySelector('.book-container');
+            if(pageState === 0) {
+                book.classList.add('open');
+                pageState = 1;
+            } else if(pageState === 1) {
+                book.classList.add('page2');
+                pageState = 2;
+                setTimeout(() => document.getElementById('btn-2').classList.add('show'), 1000);
+            }
         }
 
-        function celebrate() {
-            alert("I knew it! See you in Katihar! ❤️");
-            // Confetti Blast
-            for(let i=0; i<50; i++) {
-                let c = document.createElement('div');
+        // --- SCENE 3: CHAT ---
+        const messages = [
+            {t: "I am his girlfriend!!", s: "her"},
+            {t: "He blocked me...", s: "her"},
+            {t: "Wait, Minnie, it's me.", s: "me"},
+            {t: "I was an idiot.", s: "me"},
+            {t: "I love you.", s: "me"}
+        ];
+        function startChat() {
+            const box = document.getElementById('chat-box');
+            let i = 0;
+            const int = setInterval(() => {
+                if(i < messages.length) {
+                    const d = document.createElement('div');
+                    d.className = `msg ${messages[i].s}`;
+                    d.innerText = messages[i].t;
+                    box.appendChild(d);
+                    box.scrollTop = box.scrollHeight;
+                    i++;
+                } else {
+                    clearInterval(int);
+                    document.getElementById('btn-3').classList.add('show');
+                }
+            }, 1000);
+        }
+
+        // --- SCENE 4: RPG WALK ---
+        function startWalking() {
+            const hero = document.getElementById('hero');
+            let pos = 20;
+            const walk = setInterval(() => {
+                pos += 2;
+                hero.style.left = pos + 'px';
+                hero.style.transform = `scaleX(${pos % 20 < 10 ? 1 : -1})`; // Waddle effect
+                
+                // Stop at tree (approx 70% of screen width)
+                if(pos > window.innerWidth * 0.6) {
+                    clearInterval(walk);
+                    document.getElementById('quiz').style.display = 'block';
+                }
+            }, 20);
+        }
+
+        function wrongAnswer() { alert("Wrong! Do you even know me? 😜"); }
+        function rightAnswer() {
+            document.getElementById('quiz').style.display = 'none';
+            document.getElementById('tree').style.opacity = '0'; // Remove tree
+            alert("Correct! Path cleared.");
+            document.getElementById('btn-4').classList.add('show');
+        }
+
+        // --- SCENE 5: LANTERNS ---
+        function releaseLantern() {
+            const l = document.createElement('div');
+            l.className = 'lantern';
+            l.style.left = (Math.random() * 80 + 10) + '%';
+            l.style.bottom = '20%';
+            document.getElementById('scene-5').appendChild(l);
+            
+            // Unlock next button after 3 lanterns
+            if(document.querySelectorAll('.lantern').length >= 3) {
+                document.getElementById('btn-5').classList.add('show');
+            }
+        }
+
+        // --- SCENE 6: CONTRACT ---
+        function signContract() {
+            document.getElementById('stamp').style.opacity = 1;
+            document.getElementById('stamp').style.transform = 'rotate(-20deg) scale(1)';
+            setTimeout(() => document.getElementById('btn-6').classList.add('show'), 500);
+        }
+
+        // --- SCENE 7: FINALE ---
+        function moveNo() {
+            const btn = document.getElementById('runaway');
+            btn.style.left = Math.random() * 200 + 'px';
+            btn.style.top = Math.random() * 100 + 'px';
+        }
+        function finish() {
+            alert("I knew it! See you in Katihar, Snow! ❤️");
+            for(let i=0; i<100; i++) {
+                const c = document.createElement('div');
+                c.innerHTML = '💖';
                 c.style.position = 'fixed';
-                c.style.left = Math.random() * 100 + 'vw';
-                c.style.top = '-10px';
-                c.innerText = '🌸';
-                c.style.fontSize = Math.random()*20+10 + 'px';
-                c.style.animation = `fall ${Math.random()*3+2}s linear forwards`;
+                c.style.left = Math.random()*100+'vw';
+                c.style.top = '-50px';
+                c.style.fontSize = Math.random()*40+'px';
+                c.style.zIndex = 9999;
+                c.style.animation = `floatUp 3s linear forwards`;
                 document.body.appendChild(c);
             }
-        }
-        
-        // Add CSS for confetti
-        const style = document.createElement('style');
-        style.innerHTML = `@keyframes fall { to { transform: translateY(100vh) rotate(360deg); } }`;
-        document.head.appendChild(style);
-
-        // Timer
-        function startTimer() {
-            const start = new Date("November 28, 2025").getTime();
-            setInterval(() => {
-                const now = new Date().getTime();
-                const diff = now - start;
-                document.getElementById('d').innerText = Math.floor(diff / (1000*60*60*24));
-                document.getElementById('h').innerText = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
-                document.getElementById('m').innerText = Math.floor((diff % (1000*60*60)) / (1000*60));
-                document.getElementById('s').innerText = Math.floor((diff % (1000*60)) / 1000);
-            }, 1000);
         }
     </script>
 </body>
